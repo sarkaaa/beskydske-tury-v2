@@ -24,14 +24,14 @@ export default function ArticleTile({ article }: ArticleTileProps) {
   return (
     <Link
       href={`/trasy/${article.slug}`}
-      className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md"
+      className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500"
     >
       <span className="absolute inset-0 block">
         <Image
           src={imageUrl}
           alt=""
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover transition-transform duration-300 group-hover:scale-105 group-focus-visible:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
       </span>
@@ -39,6 +39,12 @@ export default function ArticleTile({ article }: ArticleTileProps) {
         className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent"
         aria-hidden
       />
+      <span
+        className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+        aria-hidden
+      >
+        <span className="text-2xl font-semibold text-white uppercase tracking-widest">Detail</span>
+      </span>
       <span className="relative flex flex-1 flex-col justify-end gap-0.5 p-4 text-white">
         <h2 className="tile-title">{article.title}</h2>
         <p className="mt-1 flex items-center gap-2 text-sm text-white/90">

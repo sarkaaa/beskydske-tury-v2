@@ -52,7 +52,7 @@ export default async function ArticlePage({ params }: Props) {
           <span className="absolute inset-0 block rounded-xl">
             <Image
               src={imageUrl}
-              alt=""
+              alt={`${article.title} - ${article.trailType}`}
               fill
               className="rounded-xl object-cover"
               sizes="(max-width: 1024px) 100vw, 1024px"
@@ -66,7 +66,7 @@ export default async function ArticlePage({ params }: Props) {
 
           <Link
             href="/trasy"
-            className="absolute left-4 top-4 z-10 flex items-center gap-1 rounded-full bg-white/90 p-2 text-sm font-medium text-green-800 shadow-sm transition-colors hover:bg-white"
+            className="absolute left-4 top-4 z-10 flex items-center gap-1 rounded-full bg-white/90 p-2 text-sm font-medium text-amber-800 hover:text-amber-900 hover:ring-2 hover:ring-amber-800 shadow-sm transition-colors hover:bg-white"
           >
             <FaArrowLeft className="h-5 w-5 shrink-0" />
             <span className="sr-only">Zpět na Trasy</span>
@@ -85,78 +85,80 @@ export default async function ArticlePage({ params }: Props) {
               </div>
             </div>
 
-            <div className="relative z-10 rounded-xl border border-green-100 bg-white p-4 shadow-md sm:p-5">
-              <dl className={`grid gap-3 sm:gap-4 ${article.destinationType.length > 1 ? "sm:grid-cols-3" : "sm:grid-cols-4"}`}>
-                <div className="flex items-start gap-3 sm:border-r border-green-400 pr-2">
+            <div className="relative z-10 rounded-xl border border-gray-100 bg-white p-4 shadow-md sm:p-5">
+              <div className={`grid gap-3 sm:gap-4 ${article.destinationType.length > 1 ? "sm:grid-cols-3" : "sm:grid-cols-4"}`}>
+                <div className="flex items-start gap-3 sm:border-r border-gray-200 pr-2">
                   <FaRoute className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
-                  <div>
-                    <dt className="text-xs font-medium uppercase tracking-wide text-green-600">
+                  <dl>
+                    <dt className="text-xs uppercase tracking-wide text-amber-800 font-bold">
                       Délka
                     </dt>
-                    <dd className="mt-0.5 text-green-900">
+                    <dd className="mt-0.5 text-zinc-900">
                       {article.lengthKm} km
                     </dd>
-                  </div>
+                  </dl>
                 </div>
                 {article.ascentM != null && (
-                  <div className="flex items-start gap-3 sm:border-r border-green-400 pr-2">
+                  <div className="flex items-start gap-3 sm:border-r border-gray-200 pr-2">
                     <FaLevelUpAlt className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
-                    <div>
-                      <dt className="text-xs font-medium uppercase tracking-wide text-green-600">
+                    <dl>
+                      <dt className="text-xs uppercase tracking-wide text-amber-800 font-bold">
                         Stoupání
                       </dt>
-                      <dd className="mt-0.5 text-green-900">
+                      <dd className="mt-0.5 text-zinc-900">
                         {article.ascentM} m
                       </dd>
-                    </div>
+                    </dl>
                   </div>
                 )}
                 {article.descentM != null && (
-                  <div className={`flex items-start gap-3 ${article.destinationType.length > 1 ? "" : " sm:border-r border-green-400 pr-2"}`}>
+                  <div className={`flex items-start gap-3 ${article.destinationType.length > 1 ? "" : " sm:border-r border-gray-200 pr-2"}`}>
                     <FaLevelDownAlt className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
-                    <div>
-                      <dt className="text-xs font-medium uppercase tracking-wide text-green-600">
+                    <dl>
+                      <dt className="text-xs uppercase tracking-wide text-amber-800 font-bold">
                         Klesání
                       </dt>
-                      <dd className="mt-0.5 text-green-900">
+                      <dd className="mt-0.5 text-zinc-900">
                         {article.descentM} m
                       </dd>
-                    </div>
+                    </dl>
                   </div>
                 )}
                 {article.destinationType.map((d, i) => (
-                  <div key={i} className={`flex items-start gap-3 ${i === article.destinationType.length - 1 ? "" : "sm:border-r border-green-400 pr-2"}`}>
+                  <div key={i} className={`flex items-start gap-3 ${i === article.destinationType.length - 1 ? "" : "sm:border-r border-gray-200 pr-2"}`}>
                     <DestinationIcon type={d.type} />
-                    <div>
-                      <dt className="text-xs font-medium uppercase tracking-wide text-green-600 mb-2">
+                    <dl>
+                      <dt className="text-xs uppercase tracking-wide text-amber-800 mb-2 font-bold">
                         {destinationLabel(d.type)}
                       </dt>
-                      <div className="flex items-center gap-2">
+                      <dd className="flex items-center gap-2">
                           <FaArrowRight className="h-3 w-3 shrink-0 text-green-700" />
-                        <dd className="text-green-900">
+                          <span className="text-zinc-900">
                             {d.origin}
-                        </dd>
-                      </div>
+                          </span>
+                      </dd>
+                      {/* <div className="flex items-center gap-2">
+                      </div> */}
                       {
                         d.destination &&
-                        <div className="flex items-center gap-2">
+                        <dd className="flex items-center gap-2">
                           <FaArrowLeft className="h-3 w-3 shrink-0 text-green-700" />
-                          <dd className="text-green-900">
+                          <span className="text-zinc-900">
                             {d.destination}
-                          </dd>
-                        </div>
+                          </span>
+                        </dd>
                       }
-                    </div>
+                    </dl>
                   </div>
                 ))}
-              </dl>
+              </div>
             </div>
           </div>
         </header>
 
         <div className="py-8 mt-12">
           <h2>Popis trasy</h2>
-          <p className="text-green-900/80">
+          <p className="text-zinc-900/80">
             Obsah článku bude načítán z Sanity CMS.
           </p>
         </div>
@@ -178,7 +180,7 @@ export default async function ArticlePage({ params }: Props) {
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-block rounded-lg bg-green-700 px-4 py-2.5 font-medium text-white shadow-sm transition-colors hover:bg-green-800"
+                className="mt-4 inline-block rounded-lg bg-amber-500 px-4 py-2.5 font-medium text-white shadow-sm transition-colors hover:bg-amber-600"
               >
                 Otevřít mapu v Mapy.com
               </a>
