@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito, Open_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import thumbnail from "@/images/thumbnail.png";
 
 const openSans = Open_Sans({
@@ -56,10 +56,10 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body
-        className={`${openSans.variable} ${nunito.variable} font-sans flex min-h-screen flex-col antialiased`}
+        className={`${openSans.variable} ${nunito.variable} flex min-h-screen flex-col font-sans antialiased`}
       >
         <Navbar />
-        <main className="flex-1 mt-12">{children}</main>
+        <main className="mt-12 flex-1">{children}</main>
         <Footer />
       </body>
     </html>

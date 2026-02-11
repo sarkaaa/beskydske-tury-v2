@@ -1,9 +1,9 @@
 import type { Article } from "@/types/article";
-// TEMPORARY DATA FOR DEVELOPMENT 
+
+// TEMPORARY DATA FOR DEVELOPMENT
 
 /** Default cover image for tiles when no imageUrl is set (Beskydy-style landscape). */
-const DEFAULT_TILE_IMAGE =
-  "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80";
+const DEFAULT_TILE_IMAGE = "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80";
 
 /**
  * Placeholder articles – replace with Sanity CMS fetch later.
@@ -18,21 +18,21 @@ export const placeholderArticles: Article[] = [
     descentM: 680,
     destinationType: [
       {
-      type: "car",
-      origin: "Parkoviště u hradu",
-      destination: "Parkoviště u prehrady",
-    }
-    , {
-      type: "bus",
-      origin: "Parkoviště u hradu",
-      destination: "Morávka, Úspolka",
-    }
-    , {
-      type: "train",
-      origin: "Frýdek-Místek",
-      destination: "Frýdlant nad Ostravicí",
-    }
-  ],
+        type: "car",
+        origin: "Parkoviště u hradu",
+        destination: "Parkoviště u prehrady",
+      },
+      {
+        type: "bus",
+        origin: "Parkoviště u hradu",
+        destination: "Morávka, Úspolka",
+      },
+      {
+        type: "train",
+        origin: "Frýdek-Místek",
+        destination: "Frýdlant nad Ostravicí",
+      },
+    ],
     imageUrl: DEFAULT_TILE_IMAGE,
   },
   {
@@ -42,15 +42,18 @@ export const placeholderArticles: Article[] = [
     lengthKm: 16.8,
     ascentM: 650,
     descentM: 620,
-    destinationType: [{
-      type: "bus",
-      origin: "Parkoviště u hradu",
-      destination: "Parkoviště u hradu",
-    }, {
-      type: "car",
-      origin: "Parkoviště u hradu",
-      destination: "Parkoviště u hradu",
-    }],
+    destinationType: [
+      {
+        type: "bus",
+        origin: "Parkoviště u hradu",
+        destination: "Parkoviště u hradu",
+      },
+      {
+        type: "car",
+        origin: "Parkoviště u hradu",
+        destination: "Parkoviště u hradu",
+      },
+    ],
     imageUrl: DEFAULT_TILE_IMAGE,
   },
   {
@@ -60,11 +63,13 @@ export const placeholderArticles: Article[] = [
     lengthKm: 16.8,
     ascentM: 700,
     descentM: 700,
-    destinationType: [{
-      type: "car",
-      origin: "Parkoviště u hradu",
-      destination: "Parkoviště u hradu",
-    }],
+    destinationType: [
+      {
+        type: "car",
+        origin: "Parkoviště u hradu",
+        destination: "Parkoviště u hradu",
+      },
+    ],
     imageUrl: DEFAULT_TILE_IMAGE,
   },
   {
@@ -72,11 +77,13 @@ export const placeholderArticles: Article[] = [
     title: "Lysá hora – Malenovice",
     trailType: "A → B",
     lengthKm: 16.8,
-    destinationType: [{
-      type: "car",
-      origin: "Parkoviště u hradu",
-      destination: "Parkoviště u hradu",
-    }],
+    destinationType: [
+      {
+        type: "car",
+        origin: "Parkoviště u hradu",
+        destination: "Parkoviště u hradu",
+      },
+    ],
     imageUrl: DEFAULT_TILE_IMAGE,
   },
   {
@@ -84,11 +91,13 @@ export const placeholderArticles: Article[] = [
     title: "Lysá hora – Malenovice",
     trailType: "A → B",
     lengthKm: 16.8,
-    destinationType: [{
-      type: "car",
-      origin: "Parkoviště u hradu",
-      destination: "Parkoviště u hradu",
-    }],
+    destinationType: [
+      {
+        type: "car",
+        origin: "Parkoviště u hradu",
+        destination: "Parkoviště u hradu",
+      },
+    ],
     imageUrl: DEFAULT_TILE_IMAGE,
   },
 ];

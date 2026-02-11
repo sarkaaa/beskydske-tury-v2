@@ -10,9 +10,7 @@ export default function Footer() {
     <footer className="mt-auto bg-gray-100">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-sm text-amber-800 font-semibold">
-            Beskydské túry, 2026
-          </p>
+          <p className="font-semibold text-amber-800 text-sm">Beskydské túry, 2026</p>
           <div className="flex items-center gap-6">
             {socialLinks.map(({ href, icon: Icon, label }) => (
               <a

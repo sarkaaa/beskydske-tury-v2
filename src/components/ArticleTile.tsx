@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { FaBus, FaCar, FaMapMarkerAlt, FaRoute, FaTrain } from "react-icons/fa";
 import type { Article } from "@/types/article";
 
@@ -11,8 +11,7 @@ function DestinationIcon({ type }: { type: "car" | "bus" | "train" }) {
 }
 
 // TODO: Replace with actual default image
-const DEFAULT_TILE_IMAGE =
-  "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80";
+const DEFAULT_TILE_IMAGE = "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80";
 
 type ArticleTileProps = {
   article: Article;
@@ -24,7 +23,7 @@ export default function ArticleTile({ article }: ArticleTileProps) {
   return (
     <Link
       href={`/trasy/${article.slug}`}
-      className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500"
+      className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-500 focus-visible:outline-offset-2"
     >
       <span className="absolute inset-0 block">
         <Image
@@ -43,7 +42,7 @@ export default function ArticleTile({ article }: ArticleTileProps) {
         className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
         aria-hidden
       >
-        <span className="text-2xl font-semibold text-white uppercase tracking-widest">Detail</span>
+        <span className="font-semibold text-2xl text-white uppercase tracking-widest">Detail</span>
       </span>
       <span className="relative flex flex-1 flex-col justify-end gap-0.5 p-4 text-white">
         <h2 className="tile-title">{article.title}</h2>
@@ -51,12 +50,12 @@ export default function ArticleTile({ article }: ArticleTileProps) {
           <FaMapMarkerAlt className="h-4 w-4 shrink-0" aria-hidden />
           <span>{article.trailType === "AB" ? "A → B" : "B → A"}</span>
         </p>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
             <FaRoute className="h-4 w-4 shrink-0" aria-hidden />
             <span>{article.lengthKm} km</span>
           </p>
-          <div className="mt-1 flex items-center gap-2 text-sm capitalize text-white/90">
+          <div className="mt-1 flex items-center gap-2 text-sm text-white/90 capitalize">
             {article.destinationType.map(({ type }) => (
               <DestinationIcon key={type} type={type} />
             ))}
