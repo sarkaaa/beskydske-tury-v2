@@ -1,8 +1,8 @@
 import { FaGithub, FaInstagram } from "react-icons/fa";
 
 const socialLinks = [
-  { href: "https://github.com/beskydsky-tury-v2", icon: FaGithub, label: "GitHub" },
-  { href: "https://instagram.com/beskydskytury", icon: FaInstagram, label: "Instagram" },
+  { href: "https://github.com/sarkaaa/beskydske-tury-v2", icon: FaGithub, label: "GitHub" },
+  { href: "https://instagram.com/beskydsketury", icon: FaInstagram, label: "Instagram" },
 ];
 
 export default function Footer() {

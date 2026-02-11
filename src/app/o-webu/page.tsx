@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import HeroHeader from "@/components/HeroHeader";
 import Link from "next/link";
 import Image from "next/image";
 import me from "@/images/me.png";
 import { FaExternalLinkAlt } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "O webu",
+  description:
+    "O projektu Beskydské túry.",
+};
 
 export default function AboutPage() {
   return (

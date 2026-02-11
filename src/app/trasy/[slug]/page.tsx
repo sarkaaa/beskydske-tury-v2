@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -17,6 +18,35 @@ import { getArticleBySlug } from "@/data/placeholder-articles";
 const DEFAULT_HEADER_IMAGE =
   "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80";
 
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const article = getArticleBySlug(slug);
+  if (!article) return { title: "Trasa nenalezena" };
+
+  const title = article.title;
+  const description = `Pěší trasa ${article.title} – ${article.lengthKm} km, ${article.trailType}. Dostupnost: ${article.destinationType.map((d) => d.type).join(", ")}.`;
+  const imageUrl = article.imageUrl ?? DEFAULT_HEADER_IMAGE;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: imageUrl, width: 1200, height: 630, alt: article.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
+
 function DestinationIcon({ type }: { type: "car" | "bus" | "train" }) {
   if (type === "train")
     return <FaTrain className="h-5 w-5 shrink-0 text-green-700" />;
@@ -30,10 +60,6 @@ function destinationLabel(type: "car" | "bus" | "train") {
   if (type === "bus") return "Autobusová zastávka";
   return "Parkoviště";
 }
-
-type Props = {
-  params: Promise<{ slug: string }>;
-};
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;

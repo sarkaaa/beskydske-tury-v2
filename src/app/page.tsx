@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HeroHeader from "@/components/HeroHeader";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,6 +7,10 @@ import icon2 from "@/images/icons/2.svg";
 import icon3 from "@/images/icons/3.svg";
 import hiker from "@/images/hiker.svg";
 import { FaExternalLinkAlt } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "Beskydské túry"
+};
 
 export default function Home() {
   return (

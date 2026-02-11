@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import ArticleTile from "@/components/ArticleTile";
 import HeroHeader from "@/components/HeroHeader";
 import { placeholderArticles } from "@/data/placeholder-articles";
+
+export const metadata: Metadata = {
+  title: "Trasy",
+  description:
+    "Přehled pěších tras v Moravskoslezských Beskydech. Vyberte si trasu podle délky, převýšení a dostupnosti vlakem, autobusem nebo autem.",
+};
 
 export default function TrasyPage() {
   return (
