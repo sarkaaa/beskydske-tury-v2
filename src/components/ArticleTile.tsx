@@ -1,28 +1,33 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaMapMarkerAlt, FaRoute } from "react-icons/fa";
+import { imageUrlFor } from "@/helpers/imageData";
+import { getRouteLength } from "@/helpers/routeData";
 import RouteIcon from "@/helpers/routeIcon";
+import defaultHeaderImage from "@/images/header.png";
 import type { Article } from "@/types/article";
 
-// TODO: Replace with actual default image
-const DEFAULT_TILE_IMAGE = "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80";
-
 type ArticleTileProps = {
-  article: Article;
+  article: Omit<Article, "difficulty">;
 };
 
-export default function ArticleTile({ article }: ArticleTileProps) {
-  const imageUrl = article.imageUrl ?? DEFAULT_TILE_IMAGE;
+export default async function ArticleTile({ article }: ArticleTileProps) {
+  const { slug, title, destinationType, trailType, mode, coords, waypoints, image, imageUrl } =
+    article;
+
+  const trailLengthKm = await getRouteLength(coords, mode, waypoints);
+
+  const articleImage = image ? imageUrlFor(image)?.width(300).height(480).url() : null;
 
   return (
     <Link
-      href={`/trasy/${article.slug}`}
+      href={`/trasy/${(slug as { current: string }).current ?? ""}`}
       className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md focus-visible:outline-2 focus-visible:outline-green-500 focus-visible:outline-offset-2"
     >
       <span className="absolute inset-0 block">
         <Image
-          src={imageUrl}
-          alt=""
+          src={articleImage ?? imageUrl ?? defaultHeaderImage}
+          alt={`${title} - ${trailType}`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105 group-focus-visible:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -39,18 +44,18 @@ export default function ArticleTile({ article }: ArticleTileProps) {
         <span className="font-semibold text-2xl text-white uppercase tracking-widest">Detail</span>
       </span>
       <span className="relative flex flex-1 flex-col justify-end gap-0.5 p-4 text-white">
-        <h2 className="tile-title">{article.title}</h2>
+        <h2 className="tile-title">{title}</h2>
         <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
           <FaMapMarkerAlt className="h-4 w-4 shrink-0" aria-hidden />
-          <span>{article.trailType === "AB" ? "A → B" : "B → A"}</span>
+          <span>{trailType === "AB" ? "A → B" : "B → A"}</span>
         </p>
         <div className="flex items-center justify-between">
           <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
             <FaRoute className="h-4 w-4 shrink-0" aria-hidden />
-            <span>{article.lengthKm} km</span>
+            <span>{trailLengthKm} km</span>
           </p>
           <div className="mt-1 flex items-center gap-2 text-sm text-white/90 capitalize">
-            {article.destinationType.map(({ type }) => (
+            {destinationType.map(({ type }: { type: "car" | "bus" | "train" }) => (
               <RouteIcon key={type} type={type} className="h-4 w-4 shrink-0" />
             ))}
           </div>

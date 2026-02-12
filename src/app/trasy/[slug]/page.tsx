@@ -1,28 +1,39 @@
+import type { SanityImageSource } from "@sanity/image-url";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PortableText, type SanityDocument } from "next-sanity";
 import { FaArrowLeft, FaArrowRight, FaChartLine, FaMapMarkerAlt, FaRoute } from "react-icons/fa";
 import { RouteMapLazy } from "@/components/RouteMapLazy";
-import { getArticleBySlug } from "@/data/placeholder-articles";
+import { imageUrlFor } from "@/helpers/imageData";
+import { getRouteLength, getRouteUrl } from "@/helpers/routeData";
 import RouteIcon from "@/helpers/routeIcon";
+import defaultHeaderImage from "@/images/header.png";
+import { client } from "@/sanity/client";
 import type { Article } from "@/types/article";
-
-const DEFAULT_HEADER_IMAGE =
-  "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
+const POST_QUERY_META = `*[_type == "post" && slug.current == $slug][0]{ title, image }`;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
-  if (!article) return { title: "Trasa nenalezena" };
 
-  const title = article.title;
-  const description = `Pěší trasa ${article.title} – ${article.lengthKm} km, ${article.trailType}. Dostupnost: ${article.destinationType.map((d) => d.type).join(", ")}.`;
-  const imageUrl = article.imageUrl ?? DEFAULT_HEADER_IMAGE;
+  const post = await client.fetch<{
+    title?: string;
+    image?: SanityImageSource;
+  } | null>(POST_QUERY_META, { slug }, options);
+
+  const title = post?.title ?? "Trasa nenalezena";
+  if (title === "Trasa nenalezena") return { title: "Trasa nenalezena" };
+
+  const description = `Pěší trasa ${title}.`;
+  const imageUrl =
+    (post?.image && imageUrlFor(post.image)?.width(1200).height(630).url()) ??
+    defaultHeaderImage.src;
 
   return {
     title,
@@ -30,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: article.title }],
+      images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
@@ -53,15 +64,50 @@ function getDifficultyLabel(difficulty: Article["difficulty"]) {
   return "";
 }
 
+const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]`;
+
+const options = { next: { revalidate: 30 } };
+
+/** Build a minimal article from a Sanity post when there is no placeholder for this slug. */
+function articleFromPost(
+  slug: string,
+  post?: SanityDocument & Partial<Omit<Article, "slug" | "imageUrl" | "image">>,
+  imageUrl?: string | null,
+): Article {
+  return {
+    slug,
+    coords:
+      post?.coords ??
+      ({ origin: { lat: 0, lng: 0 }, destination: { lat: 0, lng: 0 } } as {
+        origin: { lat: number; lng: number };
+        destination: { lat: number; lng: number };
+      }),
+    waypoints: post?.waypoints ?? [],
+    mode: post?.mode ?? "foot_hiking",
+    title: post?.title ?? "Trasa",
+    trailType: post?.trailType ?? "AA",
+    difficulty: post?.difficulty,
+    destinationType: post?.destinationType ?? [],
+    imageUrl: imageUrl ?? null,
+  };
+}
+
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const [, post] = await Promise.all([
+    Promise.resolve(slug as string),
+    client.fetch<SanityDocument>(POST_QUERY, { slug }, options),
+  ]);
+
+  const postImageUrl = post?.image ? imageUrlFor(post.image)?.width(550).height(310).url() : null;
+
+  const article = articleFromPost(slug, post, postImageUrl ?? null);
 
   if (!article) {
     notFound();
   }
 
-  const imageUrl = article.imageUrl ?? DEFAULT_HEADER_IMAGE;
+  const trailLengthKm = await getRouteLength(article.coords, article.mode, article.waypoints);
 
   return (
     <article>
@@ -69,7 +115,7 @@ export default async function ArticlePage({ params }: Props) {
         <header className="relative mt-10 min-h-[560px] rounded-xl sm:min-h-[420px]">
           <span className="absolute inset-0 block rounded-xl">
             <Image
-              src={imageUrl}
+              src={postImageUrl ?? article.imageUrl ?? defaultHeaderImage}
               alt={`${article.title} - ${article.trailType}`}
               fill
               className="rounded-xl object-cover"
@@ -118,7 +164,7 @@ export default async function ArticlePage({ params }: Props) {
                     <dt className="font-bold text-amber-800 text-xs uppercase tracking-wide">
                       Délka
                     </dt>
-                    <dd className="mt-0.5 text-zinc-900">{article.lengthKm} km</dd>
+                    <dd className="mt-0.5 text-zinc-900">{trailLengthKm} km</dd>
                   </dl>
                 </div>
                 {article.difficulty != null && (
@@ -136,7 +182,7 @@ export default async function ArticlePage({ params }: Props) {
                     </dl>
                   </div>
                 )}
-                {article.destinationType.map((d, i) => (
+                {post?.destinationType?.map((d: Article["destinationType"][number], i: number) => (
                   <div
                     key={`${d.type}-${d.origin}`}
                     className={`flex items-start gap-3 ${i === article.destinationType.length - 1 ? "" : "border-gray-200 pr-2 sm:border-r"}`}
@@ -166,23 +212,33 @@ export default async function ArticlePage({ params }: Props) {
 
         <div className="mt-12 py-8">
           <h2>Popis trasy</h2>
-          <p className="text-zinc-900/80">Obsah článku bude načítán z Sanity CMS.</p>
+          <div className="text-zinc-900/80">
+            {post && Array.isArray(post.body) ? (
+              <PortableText value={post.body} />
+            ) : (
+              <p>Obsah nenalezen.</p>
+            )}
+          </div>
         </div>
 
         <div className="pb-8">
           <h2>Mapa</h2>
           <div className="mt-4">
-            {article.imageUrl && (
-              <RouteMapLazy
-                apiKey={process.env.MAPY_API_KEY ?? ""}
-                coords={article.coords}
-                waypoints={article.waypoints}
-                className="h-[450px] w-full rounded-lg"
-              />
-            )}
+            {article.coords.origin.lat &&
+              article.coords.origin.lng &&
+              article.coords.destination.lat &&
+              article.coords.destination.lng && (
+                <RouteMapLazy
+                  apiKey={process.env.MAPY_API_KEY ?? ""}
+                  coords={article.coords}
+                  waypoints={article.waypoints}
+                  mode={article.mode}
+                  className="h-[450px] w-full rounded-lg"
+                />
+              )}
             <div className="flex justify-center">
               <a
-                href="https://mapy.cz"
+                href={getRouteUrl(article.coords, article.mode, article.waypoints)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 inline-block rounded-lg bg-amber-500 px-4 py-2.5 font-medium text-white shadow-sm transition-colors hover:bg-amber-600"

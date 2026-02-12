@@ -1,8 +1,8 @@
-/**
- * Article (trail) type – placeholder shape for future Sanity CMS content.
- */
+import type { SanityImageSource } from "@sanity/image-url";
+
+/* Article (trail) type */
 export type Article = {
-  slug: string;
+  slug: string | { current: string };
   coords: {
     origin: {
       lat: number;
@@ -17,9 +17,9 @@ export type Article = {
     lat: number;
     lng: number;
   }[];
+  mode?: "foot_hiking" | "foot_fast";
   title: string;
-  trailType: string; // e.g. "A → B"
-  lengthKm: number;
+  trailType: "AA" | "AB";
   difficulty?: "easy" | "medium" | "hard";
   destinationType: {
     type: "car" | "bus" | "train";
@@ -27,4 +27,5 @@ export type Article = {
     destination: string;
   }[];
   imageUrl?: string | null;
+  image?: SanityImageSource | null;
 };
