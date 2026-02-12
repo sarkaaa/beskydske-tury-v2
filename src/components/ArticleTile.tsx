@@ -1,8 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FaMapMarkerAlt, FaRoute } from "react-icons/fa";
-import RouteIcon from "@/helpers/routeIcon";
+import { FaBus, FaCar, FaMapMarkerAlt, FaRoute, FaTrain } from "react-icons/fa";
 import type { Article } from "@/types/article";
+
+function DestinationIcon({ type }: { type: "car" | "bus" | "train" }) {
+  if (type === "train") return <FaTrain className="h-4 w-4 shrink-0" />;
+  else if (type === "bus") return <FaBus className="h-4 w-4 shrink-0" />;
+  else if (type === "car") return <FaCar className="h-4 w-4 shrink-0" />;
+  return;
+}
 
 // TODO: Replace with actual default image
 const DEFAULT_TILE_IMAGE = "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80";
@@ -17,7 +23,7 @@ export default function ArticleTile({ article }: ArticleTileProps) {
   return (
     <Link
       href={`/trasy/${article.slug}`}
-      className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md focus-visible:outline-2 focus-visible:outline-green-500 focus-visible:outline-offset-2"
+      className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-500 focus-visible:outline-offset-2"
     >
       <span className="absolute inset-0 block">
         <Image
@@ -51,7 +57,7 @@ export default function ArticleTile({ article }: ArticleTileProps) {
           </p>
           <div className="mt-1 flex items-center gap-2 text-sm text-white/90 capitalize">
             {article.destinationType.map(({ type }) => (
-              <RouteIcon key={type} type={type} className="h-4 w-4 shrink-0" />
+              <DestinationIcon key={type} type={type} />
             ))}
           </div>
         </div>
