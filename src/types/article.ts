@@ -3,11 +3,24 @@
  */
 export type Article = {
   slug: string;
+  coords: {
+    origin: {
+      lat: number;
+      lng: number;
+    };
+    destination: {
+      lat: number;
+      lng: number;
+    };
+  };
+  waypoints?: {
+    lat: number;
+    lng: number;
+  }[];
   title: string;
   trailType: string; // e.g. "A → B"
   lengthKm: number;
-  ascentM?: number;
-  descentM?: number;
+  difficulty?: "easy" | "medium" | "hard";
   destinationType: {
     type: "car" | "bus" | "train";
     origin: string;

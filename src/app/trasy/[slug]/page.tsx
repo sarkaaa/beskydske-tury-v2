@@ -2,17 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  FaArrowLeft,
-  FaArrowRight,
-  FaBus,
-  FaCar,
-  FaLevelDownAlt,
-  FaLevelUpAlt,
-  FaMapMarkerAlt,
-  FaRoute,
-  FaTrain,
-} from "react-icons/fa";
+import { RouteMapLazy } from "@/components/RouteMapLazy";
 import { getArticleBySlug } from "@/data/placeholder-articles";
 
 const DEFAULT_HEADER_IMAGE =
@@ -183,12 +173,11 @@ export default async function ArticlePage({ params }: Props) {
           <h2>Mapa</h2>
           <div className="mt-4">
             {article.imageUrl && (
-              <Image
-                src={article.imageUrl}
-                alt="Mapa trasy"
-                width={1000}
-                height={500}
-                className="rounded-lg object-cover"
+              <RouteMapLazy
+                apiKey={process.env.MAPY_API_KEY ?? ""}
+                coords={article.coords}
+                waypoints={article.waypoints}
+                className="h-[450px] w-full rounded-lg"
               />
             )}
             <div className="flex justify-center">
