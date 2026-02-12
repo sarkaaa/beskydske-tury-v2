@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FaArrowLeft, FaArrowRight, FaChartLine, FaMapMarkerAlt, FaRoute } from "react-icons/fa";
 import { RouteMapLazy } from "@/components/RouteMapLazy";
 import { getArticleBySlug } from "@/data/placeholder-articles";
+import RouteIcon from "@/helpers/routeIcon";
+import type { Article } from "@/types/article";
 
 const DEFAULT_HEADER_IMAGE =
   "https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80";
@@ -37,16 +40,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function DestinationIcon({ type }: { type: "car" | "bus" | "train" }) {
-  if (type === "train") return <FaTrain className="h-5 w-5 shrink-0 text-green-700" />;
-  if (type === "bus") return <FaBus className="h-5 w-5 shrink-0 text-green-700" />;
-  return <FaCar className="h-5 w-5 shrink-0 text-green-700" />;
-}
-
 function destinationLabel(type: "car" | "bus" | "train") {
   if (type === "train") return "Nádraží";
   if (type === "bus") return "Autobusová zastávka";
   return "Parkoviště";
+}
+
+function getDifficultyLabel(difficulty: Article["difficulty"]) {
+  if (difficulty === "easy") return "Snadná";
+  if (difficulty === "medium") return "Střední";
+  if (difficulty === "hard") return "Těžká";
+  return "";
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -87,20 +91,27 @@ export default async function ArticlePage({ params }: Props) {
           </Link>
 
           <div className="absolute right-0 -bottom-[80px] left-0 z-10 p-4 sm:p-6">
-            <div className="flex flex-col justify-between sm:flex-row sm:items-center">
-              <h1 className="mb-4 font-semibold text-2xl text-white leading-tight drop-shadow-md sm:text-3xl">
-                {article.title}
-              </h1>
-              <div className="mb-4 flex items-center gap-2 font-bold text-2xl text-white/90">
-                <FaMapMarkerAlt className="h-5 w-5 shrink-0" />
-                <span>{article.trailType === "AB" ? "A → B" : article.trailType}</span>
-              </div>
-            </div>
+            <h1 className="mb-4 font-semibold text-2xl text-white leading-tight drop-shadow-md sm:text-3xl">
+              {article.title}
+            </h1>
 
             <div className="relative z-10 rounded-xl border border-gray-100 bg-white p-4 shadow-md sm:p-5">
               <div
                 className={`grid gap-3 sm:gap-4 ${article.destinationType.length > 1 ? "sm:grid-cols-3" : "sm:grid-cols-4"}`}
               >
+                {article.trailType != null && (
+                  <div className="flex items-start gap-3 border-gray-200 pr-2 sm:border-r">
+                    <FaMapMarkerAlt className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
+                    <dl>
+                      <dt className="font-bold text-amber-800 text-xs uppercase tracking-wide">
+                        Typ trasy
+                      </dt>
+                      <dd className="mt-0.5 text-zinc-900">
+                        {article.trailType === "AB" ? "A → B" : "A → A"}
+                      </dd>
+                    </dl>
+                  </div>
+                )}
                 <div className="flex items-start gap-3 border-gray-200 pr-2 sm:border-r">
                   <FaRoute className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
                   <dl>
@@ -110,27 +121,18 @@ export default async function ArticlePage({ params }: Props) {
                     <dd className="mt-0.5 text-zinc-900">{article.lengthKm} km</dd>
                   </dl>
                 </div>
-                {article.ascentM != null && (
-                  <div className="flex items-start gap-3 border-gray-200 pr-2 sm:border-r">
-                    <FaLevelUpAlt className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
-                    <dl>
-                      <dt className="font-bold text-amber-800 text-xs uppercase tracking-wide">
-                        Stoupání
-                      </dt>
-                      <dd className="mt-0.5 text-zinc-900">{article.ascentM} m</dd>
-                    </dl>
-                  </div>
-                )}
-                {article.descentM != null && (
+                {article.difficulty != null && (
                   <div
                     className={`flex items-start gap-3 ${article.destinationType.length > 1 ? "" : "border-gray-200 pr-2 sm:border-r"}`}
                   >
-                    <FaLevelDownAlt className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
+                    <FaChartLine className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
                     <dl>
                       <dt className="font-bold text-amber-800 text-xs uppercase tracking-wide">
-                        Klesání
+                        Obtížnost
                       </dt>
-                      <dd className="mt-0.5 text-zinc-900">{article.descentM} m</dd>
+                      <dd className="mt-0.5 text-zinc-900">
+                        {getDifficultyLabel(article.difficulty)}
+                      </dd>
                     </dl>
                   </div>
                 )}
@@ -139,7 +141,7 @@ export default async function ArticlePage({ params }: Props) {
                     key={`${d.type}-${d.origin}`}
                     className={`flex items-start gap-3 ${i === article.destinationType.length - 1 ? "" : "border-gray-200 pr-2 sm:border-r"}`}
                   >
-                    <DestinationIcon type={d.type} />
+                    <RouteIcon type={d.type} className="h-5 w-5 shrink-0 text-green-700" />
                     <dl>
                       <dt className="mb-2 font-bold text-amber-800 text-xs uppercase tracking-wide">
                         {destinationLabel(d.type)}
@@ -148,8 +150,6 @@ export default async function ArticlePage({ params }: Props) {
                         <FaArrowRight className="h-3 w-3 shrink-0 text-green-700" />
                         <span className="text-zinc-900">{d.origin}</span>
                       </dd>
-                      {/* <div className="flex items-center gap-2">
-                      </div> */}
                       {d.destination && (
                         <dd className="flex items-center gap-2">
                           <FaArrowLeft className="h-3 w-3 shrink-0 text-green-700" />
