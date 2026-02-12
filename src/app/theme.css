@@ -1,0 +1,33 @@
+/**
+ * Tailwind v4 theme overrides – green & amber.
+ * Tuned for accessibility on white background (WCAG AA).
+ * This file is imported in globals.css.
+ */
+
+@theme inline {
+  /* Green – light tints for backgrounds, dark for text on white (≥4.5:1) */
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #22c55e;
+  --color-green-500: #16a34a;
+  --color-green-600: #15803d;
+  --color-green-700: #166534;
+  --color-green-800: #14532d;
+  --color-green-900: #14532d;
+  --color-green-950: #052e16;
+
+  /* Amber – light for backgrounds, dark for text; 500/600 support white text on buttons */
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #b45309;
+  --color-amber-600: #92400e;
+  --color-amber-700: #78350f;
+  --color-amber-800: #78350f;
+  --color-amber-900: #451a03;
+  --color-amber-950: #451a03;
+}

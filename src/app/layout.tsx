@@ -1,22 +1,51 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nunito, Open_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import thumbnail from "@/images/thumbnail.png";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
+  subsets: ["latin", "latin-ext"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin", "latin-ext"],
 });
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://beskydske-tury.cz";
 
 export const metadata: Metadata = {
-  title: "Beskydské túry",
-  description: "Beskydské túry",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Beskydské túry",
+    template: "%s | Beskydské túry",
+  },
+  description:
+    "Tipy na pěší túry v Moravskoslezských Beskydech. Přehled tras s délkou, převýšením a dostupností dopravou.",
+  authors: [{ name: "Šárka Chwastková", url: "https://pandacode.cz/" }],
+  creator: "Beskydské túry",
+  openGraph: {
+    type: "website",
+    locale: "cs_CZ",
+    siteName: "Beskydské túry",
+    images: [
+      {
+        url: thumbnail.src,
+        width: thumbnail.width,
+        height: thumbnail.height,
+        alt: "Beskydské túry – pěší trasy v Beskydech",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Beskydské túry",
+    description: "Tipy na pěší túry v Moravskoslezských Beskydech.",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -27,10 +56,10 @@ export default function RootLayout({
   return (
     <html lang="cs">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
+        className={`${openSans.variable} ${nunito.variable} flex min-h-screen flex-col font-sans antialiased`}
       >
         <Navbar />
-        <main className="flex-1 mt-12">{children}</main>
+        <main className="mt-12 flex-1">{children}</main>
         <Footer />
       </body>
     </html>
