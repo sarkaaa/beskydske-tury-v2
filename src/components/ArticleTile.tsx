@@ -47,7 +47,7 @@ export default async function ArticleTile({ article }: ArticleTileProps) {
         <h2 className="tile-title">{title}</h2>
         <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
           <FaMapMarkerAlt className="h-4 w-4 shrink-0" aria-hidden />
-          <span>{trailType === "AB" ? "A → B" : "B → A"}</span>
+          <span>{trailType === "AB" ? "A → B" : "A → A"}</span>
         </p>
         <div className="flex items-center justify-between">
           <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
