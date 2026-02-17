@@ -14,8 +14,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "maplibre-gl": "^5.18.0",
+    "@next/third-parties": "^16.1.6",
     "@sanity/image-url": "^2.0.3",
+    "maplibre-gl": "^5.18.0",
     "next": "16.1.6",
     "next-sanity": "^12.1.0",
     "react": "19.2.3",

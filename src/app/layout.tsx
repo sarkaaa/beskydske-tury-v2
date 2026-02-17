@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito, Open_Sans } from "next/font/google";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import thumbnail from "@/images/thumbnail.png";
@@ -15,7 +16,7 @@ const nunito = Nunito({
   subsets: ["latin", "latin-ext"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://beskydske-tury.cz";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://beskydsketury.cz";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -23,8 +24,7 @@ export const metadata: Metadata = {
     default: "Beskydské túry",
     template: "%s | Beskydské túry",
   },
-  description:
-    "Tipy na pěší túry v Moravskoslezských Beskydech. Přehled tras s délkou, převýšením a dostupností dopravou.",
+  description: "Tipy na pěší túry v Moravskoslezských Beskydech.",
   authors: [{ name: "Šárka Chwastková", url: "https://pandacode.cz/" }],
   creator: "Beskydské túry",
   openGraph: {
@@ -58,6 +58,7 @@ export default function RootLayout({
       <body
         className={`${openSans.variable} ${nunito.variable} flex min-h-screen flex-col font-sans antialiased`}
       >
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? ""} />
         <Navbar />
         <main className="mt-12 flex-1">{children}</main>
         <Footer />
