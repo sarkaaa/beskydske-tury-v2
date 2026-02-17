@@ -1,4 +1,4 @@
-import { type GeoJSONSource, type LngLatLike, Map as MapLibreMap } from "maplibre-gl";
+import { type GeoJSONSource, type LngLatLike, Map as MapLibreMap, Marker } from "maplibre-gl";
 import type { RouteMapProps } from "@/types/routeMap";
 
 class LogoControl {
@@ -37,6 +37,32 @@ function bbox(coords: number[][]) {
     [minLongitude, minLatitude],
     [maxLongitude, maxLatitude],
   ] as [[number, number], [number, number]];
+}
+
+export async function getRouteInfo(
+  apiKey: string,
+  coords: RouteMapProps["coords"],
+  mode?: RouteMapProps["mode"],
+  waypoints?: RouteMapProps["waypoints"],
+) {
+  const coordsOrigin = [coords.origin.lng, coords.origin.lat];
+  const coordsDestination = [coords.destination.lng, coords.destination.lat];
+  const url = new URL("https://api.mapy.com/v1/routing/route");
+  url.searchParams.set("apikey", apiKey);
+  url.searchParams.set("lang", "cs");
+  url.searchParams.set("start", coordsOrigin.join(","));
+  url.searchParams.set("end", coordsDestination.join(","));
+  url.searchParams.set("routeType", mode ?? "foot_hiking");
+  if (waypoints?.length) {
+    url.searchParams.set(
+      "waypoints",
+      waypoints.map((waypoint) => `${waypoint.lng},${waypoint.lat}`).join(";"),
+    );
+  }
+  url.searchParams.set("avoidToll", "true");
+  const response = await fetch(url.toString(), { mode: "cors" });
+  const json = await response.json();
+  return json;
 }
 
 export function initMap(
@@ -90,30 +116,13 @@ export function initMap(
     },
   });
 
+  new Marker().setLngLat([coords.origin.lng, coords.origin.lat]).addTo(map);
+
   map.addControl(new LogoControl(), "bottom-left");
 
   async function fetchRoute() {
-    const coordsOrigin = [coords.origin.lng, coords.origin.lat];
-    const coordsDestination = [coords.destination.lng, coords.destination.lat];
-    const routeMode = mode === "foot_hiking" ? "foot_hiking" : "foot_fast";
-
     try {
-      const url = new URL("https://api.mapy.com/v1/routing/route");
-      url.searchParams.set("apikey", apiKey);
-      url.searchParams.set("lang", "cs");
-      url.searchParams.set("start", coordsOrigin.join(","));
-      url.searchParams.set("end", coordsDestination.join(","));
-      url.searchParams.set("routeType", routeMode);
-      if (waypoints?.length) {
-        url.searchParams.set(
-          "waypoints",
-          waypoints.map((waypoint) => `${waypoint.lng},${waypoint.lat}`).join(";"),
-        );
-      }
-      url.searchParams.set("avoidToll", "true");
-
-      const response = await fetch(url.toString(), { mode: "cors" });
-      const json = await response.json();
+      const json = await getRouteInfo(apiKey, coords, mode, waypoints);
 
       const source = map.getSource("route-geometry");
       if (source && json.geometry) {

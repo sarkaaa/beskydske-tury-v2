@@ -25,7 +25,7 @@ export default function Home() {
               Projekt jsem vytvořila jako volnočasovou aktivitu a celý kód je zveřejněný jako
               open-source na{" "}
               <a
-                href="https://github.com/beskydsky-tury-v2"
+                href="https://github.com/sarkaaa/beskydsky-tury-v2"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center font-medium text-green-600 hover:text-green-700"
@@ -71,7 +71,7 @@ export default function Home() {
               <h4>Zobrazení trasy v mapě</h4>
               <p className="relative flex-1">
                 Každá trasa ve svém detailu obsahuje dynamický mapový podklad dostupný z Mapy.com od
-                Seznamu. Každou trasu je možné si otevřít v nové záložce přímo na Mapy.cz a tak si
+                Seznamu. Každou trasu je možné si otevřít v nové záložce přímo na Mapy.com a tak si
                 trasu uložit do svého profilu.
                 <span
                   className="absolute top-0 left-0 font-extrabold text-9xl text-green-800 opacity-15"
@@ -87,7 +87,7 @@ export default function Home() {
               <h4>Výběr trasy</h4>
               <p className="relative flex-1">
                 Tadá! 🎉 Trasa je zvolená, mapa uložená, počasí zkontrolováno a teď už se jen stačí
-                sbalit do batohu a s dobrou náladu (a telefonem s Mapy.cz aplikací) vyrazit na
+                sbalit do batohu a s dobrou náladu (a telefonem s Mapy.com aplikací) vyrazit na
                 výlet.
                 <span
                   className="absolute top-0 left-0 font-extrabold text-9xl text-green-800 opacity-15"
