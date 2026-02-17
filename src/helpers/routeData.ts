@@ -6,9 +6,11 @@ export async function getRouteLength(
   coords: Article["coords"],
   mode?: Article["mode"],
   waypoints?: Article["waypoints"],
+  sameWay?: Article["sameWay"],
 ) {
   const routeInfo = await getRouteInfo(process.env.MAPY_API_KEY ?? "", coords, mode, waypoints);
-  return Math.round((routeInfo.length / 1000) * 100) / 100;
+  const length = Math.round((routeInfo.length / 1000) * 100) / 100;
+  return sameWay ? length * 2 : length;
 }
 
 export function getRouteUrl(

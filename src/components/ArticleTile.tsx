@@ -12,12 +12,22 @@ type ArticleTileProps = {
 };
 
 export default async function ArticleTile({ article }: ArticleTileProps) {
-  const { slug, title, destinationType, trailType, mode, coords, waypoints, image, imageUrl } =
-    article;
+  const {
+    slug,
+    title,
+    destinationType,
+    trailType,
+    mode,
+    coords,
+    waypoints,
+    image,
+    imageUrl,
+    sameWay,
+  } = article;
 
-  const trailLengthKm = await getRouteLength(coords, mode, waypoints);
+  const trailLengthKm = await getRouteLength(coords, mode, waypoints, sameWay);
 
-  const articleImage = image ? imageUrlFor(image)?.width(300).height(480).url() : null;
+  const articleImage = image ? imageUrlFor(image)?.url() : null;
 
   return (
     <Link
