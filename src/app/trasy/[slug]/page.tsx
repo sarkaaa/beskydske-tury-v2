@@ -86,6 +86,7 @@ function articleFromPost(
     mode: post?.mode ?? "foot_hiking",
     title: post?.title ?? "Trasa",
     trailType: post?.trailType ?? "AA",
+    sameWay: post?.sameWay ?? false,
     difficulty: post?.difficulty,
     destinationType: post?.destinationType ?? [],
     imageUrl: imageUrl ?? null,
@@ -99,7 +100,7 @@ export default async function ArticlePage({ params }: Props) {
     client.fetch<SanityDocument>(POST_QUERY, { slug }, options),
   ]);
 
-  const postImageUrl = post?.image ? imageUrlFor(post.image)?.width(550).height(310).url() : null;
+  const postImageUrl = post?.image ? imageUrlFor(post.image)?.url() : null;
 
   const article = articleFromPost(slug, post, postImageUrl ?? null);
 
@@ -107,7 +108,19 @@ export default async function ArticlePage({ params }: Props) {
     notFound();
   }
 
-  const trailLengthKm = await getRouteLength(article.coords, article.mode, article.waypoints);
+  const {
+    title,
+    trailType,
+    destinationType,
+    imageUrl,
+    difficulty,
+    coords,
+    mode,
+    waypoints,
+    sameWay,
+  } = article;
+
+  const trailLengthKm = await getRouteLength(coords, mode, waypoints, sameWay);
 
   return (
     <article>
@@ -115,8 +128,8 @@ export default async function ArticlePage({ params }: Props) {
         <header className="relative mt-10 min-h-[560px] rounded-xl sm:min-h-[420px]">
           <span className="absolute inset-0 block rounded-xl">
             <Image
-              src={postImageUrl ?? article.imageUrl ?? defaultHeaderImage}
-              alt={`${article.title} - ${article.trailType}`}
+              src={postImageUrl ?? imageUrl ?? defaultHeaderImage}
+              alt={`${title} - ${trailType}`}
               fill
               className="rounded-xl object-cover"
               sizes="(max-width: 1024px) 100vw, 1024px"
@@ -138,7 +151,7 @@ export default async function ArticlePage({ params }: Props) {
 
           <div className="absolute right-0 -bottom-[80px] left-0 z-10 p-4 sm:p-6">
             <h1 className="mb-4 font-semibold text-2xl text-white leading-tight drop-shadow-md sm:text-3xl">
-              {article.title}
+              {title}
             </h1>
 
             <div className="relative z-10 rounded-xl border border-gray-100 bg-white p-4 shadow-md sm:p-5">
@@ -167,25 +180,23 @@ export default async function ArticlePage({ params }: Props) {
                     <dd className="mt-0.5 text-zinc-900">{trailLengthKm} km</dd>
                   </dl>
                 </div>
-                {article.difficulty != null && (
+                {difficulty != null && (
                   <div
-                    className={`flex items-start gap-3 ${article.destinationType.length > 1 ? "" : "border-gray-200 pr-2 sm:border-r"}`}
+                    className={`flex items-start gap-3 ${destinationType.length > 1 ? "" : "border-gray-200 pr-2 sm:border-r"}`}
                   >
                     <FaChartLine className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
                     <dl>
                       <dt className="font-bold text-amber-800 text-xs uppercase tracking-wide">
                         Obtížnost
                       </dt>
-                      <dd className="mt-0.5 text-zinc-900">
-                        {getDifficultyLabel(article.difficulty)}
-                      </dd>
+                      <dd className="mt-0.5 text-zinc-900">{getDifficultyLabel(difficulty)}</dd>
                     </dl>
                   </div>
                 )}
-                {post?.destinationType?.map((d: Article["destinationType"][number], i: number) => (
+                {destinationType?.map((d: Article["destinationType"][number], i: number) => (
                   <div
                     key={`${d.type}-${d.origin}`}
-                    className={`flex items-start gap-3 ${i === article.destinationType.length - 1 ? "" : "border-gray-200 pr-2 sm:border-r"}`}
+                    className={`flex items-start gap-3 ${i === destinationType.length - 1 ? "" : "border-gray-200 pr-2 sm:border-r"}`}
                   >
                     <RouteIcon type={d.type} className="h-5 w-5 shrink-0 text-green-700" />
                     <dl>
@@ -196,7 +207,7 @@ export default async function ArticlePage({ params }: Props) {
                         <FaArrowRight className="h-3 w-3 shrink-0 text-green-700" />
                         <span className="text-zinc-900">{d.origin}</span>
                       </dd>
-                      {d.destination && (
+                      {trailType === "AB" && d.destination && (
                         <dd className="flex items-center gap-2">
                           <FaArrowLeft className="h-3 w-3 shrink-0 text-green-700" />
                           <span className="text-zinc-900">{d.destination}</span>

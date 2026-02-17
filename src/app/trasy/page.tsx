@@ -8,7 +8,7 @@ import type { Article } from "@/types/article";
 const POSTS_QUERY = `*[
   _type == "post"
   && defined(slug.current)
-]|order(publishedAt desc)[0...12]{_id, title, slug, trailType, destinationType, coords, mode, waypoints, imageUrl, image}`;
+]|order(publishedAt desc)[0...12]{_id, title, slug, trailType, sameWay, destinationType, coords, mode, waypoints, imageUrl, image}`;
 
 const options = { next: { revalidate: 30 } };
 

@@ -20,6 +20,7 @@ export type Article = {
   mode?: "foot_hiking" | "foot_fast";
   title: string;
   trailType: "AA" | "AB";
+  sameWay?: boolean;
   difficulty?: "easy" | "medium" | "hard";
   destinationType: {
     type: "car" | "bus" | "train";
