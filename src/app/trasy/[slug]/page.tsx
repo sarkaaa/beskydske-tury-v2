@@ -252,7 +252,7 @@ export default async function ArticlePage({ params }: Props) {
                 href={getRouteUrl(article.coords, article.mode, article.waypoints)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-block rounded-lg bg-amber-500 px-4 py-2.5 font-medium text-white shadow-sm transition-colors hover:bg-amber-600"
+                className="mt-4·rounded-md·bg-amber-500·px-4·py-2·text-center·text-white·hover:bg-amber-600·hover:text-white·focus:bg-amber-600·focus:text-white"
               >
                 Otevřít mapu v Mapy.com
               </a>

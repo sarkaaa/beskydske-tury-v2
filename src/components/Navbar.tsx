@@ -44,7 +44,7 @@ export default function Navbar() {
           <Link href="/" className="relative flex items-center">
             <Image src={logo} alt="Beskydské túry - logo" className="h-auto w-auto" width={125} />
           </Link>
-          <div className="flex items-center gap-3 md:gap-6">
+          <div className="flex shrink-0 items-center gap-1 xs:gap-3 md:gap-6">
             {navItems.map((item) => (
               <Link
                 key={item.href}
