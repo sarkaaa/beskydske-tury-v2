@@ -38,6 +38,7 @@ export default function Navbar() {
     <nav
       className="fixed top-0 z-20 w-full bg-[rgb(255,255,255,0.6)] backdrop-blur-xs transition-transform duration-300 ease-out"
       style={{ transform: visible ? "translateY(0)" : "translateY(-100%)" }}
+      data-testid="navbar"
     >
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="relative flex h-14 items-center justify-between">
