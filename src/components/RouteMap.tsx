@@ -19,11 +19,13 @@ export function RouteMap({ apiKey, className, coords, mode, waypoints }: RouteMa
 
   if (!apiKey) {
     return (
-      <div className={className}>
+      <div data-testid="route-map-error" className={className}>
         <output>Mapa není k dispozici.</output>
       </div>
     );
   }
 
-  return <div ref={containerRef} className={className} aria-hidden="false" />;
+  return (
+    <div ref={containerRef} data-testid="route-map" className={className} aria-hidden="false" />
+  );
 }

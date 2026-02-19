@@ -33,6 +33,7 @@ export default async function ArticleTile({ article }: ArticleTileProps) {
     <Link
       href={`/trasy/${(slug as { current: string }).current ?? ""}`}
       className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-lg shadow-sm transition-[border-color,shadow] hover:border-green-400 hover:shadow-md focus-visible:outline-2 focus-visible:outline-green-500 focus-visible:outline-offset-2"
+      data-testid="article-tile"
     >
       <span className="absolute inset-0 block">
         <Image
@@ -56,12 +57,20 @@ export default async function ArticleTile({ article }: ArticleTileProps) {
       <span className="relative flex flex-1 flex-col justify-end gap-0.5 p-4 text-white">
         <h2 className="tile-title">{title}</h2>
         <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
-          <FaMapMarkerAlt className="h-4 w-4 shrink-0" aria-hidden />
+          <FaMapMarkerAlt
+            className="h-4 w-4 shrink-0"
+            data-testid="article-tile-trail-type"
+            aria-hidden
+          />
           <span>{trailType === "AB" ? "A → B" : "A → A"}</span>
         </p>
         <div className="flex items-center justify-between">
           <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
-            <FaRoute className="h-4 w-4 shrink-0" aria-hidden />
+            <FaRoute
+              className="h-4 w-4 shrink-0"
+              data-testid="article-tile-trail-length"
+              aria-hidden
+            />
             <span>{trailLengthKm} km</span>
           </p>
           <div className="mt-1 flex items-center gap-2 text-sm text-white/90 capitalize">

@@ -38,12 +38,14 @@ export default function Home() {
               <Link
                 href="/trasy"
                 className="rounded-md border-2 border-amber-500 bg-amber-500 px-4 py-2 text-center text-white hover:border-amber-600 hover:bg-amber-600 focus:border-amber-600 focus:bg-amber-600"
+                data-testid="trails-link"
               >
                 Zobrazit trasy
               </Link>
               <Link
                 href="/o-webu"
                 className="rounded-md border-2 border-amber-500 bg-white px-4 py-2 text-center text-amber-500 hover:border-amber-600 hover:bg-amber-600 hover:text-white focus:border-amber-600 focus:bg-amber-600 focus:text-white"
+                data-testid="about-link"
               >
                 Více o Beskydských túrách
               </Link>
@@ -109,6 +111,7 @@ export default function Home() {
           <div className="mt-4 flex justify-center">
             <Link
               href="/trasy"
+              data-testid="all-trails-link"
               className="rounded-md bg-amber-500 px-4 py-2 text-white hover:bg-amber-600 focus:bg-amber-600"
             >
               Zobrazit všechny trasy
