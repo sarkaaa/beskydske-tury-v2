@@ -26,26 +26,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Install Playwright browsers
-        run: pnpm exec playwright install chromium
+        run: pnpm exec playwright install
       - name: Run your tests
-        id: test-run
-        run: |
-          pnpm exec playwright test
-          EXIT=$?
-          echo "exit_code=$EXIT" >> $GITHUB_OUTPUT
-          exit $EXIT
-      - name: Test results
-        env:
-          EXIT_CODE: ${{ steps.test-run.outputs.exit_code }}
-        run: |
-          if [ "$EXIT_CODE" = "0" ]; then
-            echo "Tests passed successfully ✅"
-          else
-            echo "Tests failed ❌"
-          fi
-          exit $EXIT_CODE
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v5
+        run: pnpm exec playwright test
+      - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
