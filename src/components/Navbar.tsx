@@ -38,13 +38,14 @@ export default function Navbar() {
     <nav
       className="fixed top-0 z-20 w-full bg-[rgb(255,255,255,0.6)] backdrop-blur-xs transition-transform duration-300 ease-out"
       style={{ transform: visible ? "translateY(0)" : "translateY(-100%)" }}
+      data-testid="navbar"
     >
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="relative flex h-14 items-center justify-between">
           <Link href="/" className="relative flex items-center">
             <Image src={logo} alt="Beskydské túry - logo" className="h-auto w-auto" width={125} />
           </Link>
-          <div className="flex items-center gap-3 md:gap-6">
+          <div className="flex shrink-0 items-center gap-1 xs:gap-3 md:gap-6">
             {navItems.map((item) => (
               <Link
                 key={item.href}
