@@ -10,6 +10,9 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL ?? "http://localhost:3000",
     trace: "on-first-retry",
+    extraHTTPHeaders: {
+      "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET ?? "",
+    },
   },
   webServer: {
     command: "pnpm run dev",
