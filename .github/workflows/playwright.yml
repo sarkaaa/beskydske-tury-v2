@@ -7,14 +7,6 @@ jobs:
   playwright:
     name: 'Playwright Tests'
     runs-on: ubuntu-latest
-    env:
-      MAPY_API_KEY: ${{ secrets.MAPY_API_KEY }}
-      SANITY_PROJECT_ID: ${{ vars.SANITY_PROJECT_ID }}
-      SANITY_DATASET: ${{ vars.SANITY_DATASET }}
-      SANITY_API_VERSION: ${{ vars.SANITY_API_VERSION }}
-      SANITY_USE_CDN: ${{ vars.SANITY_USE_CDN }}
-      SANITY_APP_ID: ${{ secrets.SANITY_APP_ID }}
-      GOOGLE_ANALYTICS_ID: ${{ vars.GOOGLE_ANALYTICS_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
