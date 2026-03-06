@@ -15,12 +15,8 @@ jobs:
       VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      - name: Checkout and clone the repository
+        uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
@@ -28,24 +24,31 @@ jobs:
           cache: true
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
       - name: Install Playwright browsers
         run: pnpm exec playwright install
+
       - name: Get the Vercel preview url
         id: vercel_preview_url
         uses: zentered/vercel-preview-url@v1.4.0
         with:
           vercel_team_id: ${{ secrets.VERCEL_TEAM_ID }}
           vercel_app: 'beskydske-tury-v2'
-      - uses: UnlyEd/github-action-await-vercel@v2.0.0
+
+      - name: Wait for Vercel deployment to be ready
+        uses: UnlyEd/github-action-await-vercel@v2.0.0
         with:
           deployment-url: ${{ format('https://{0}', steps.vercel_preview_url.outputs.preview_url) }}
           timeout: 420
           poll-interval: 15
+
       - name: Run your tests
         env:
           BASE_URL: ${{ format('https://{0}', steps.vercel_preview_url.outputs.preview_url) }}
         run: pnpm exec playwright test
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
