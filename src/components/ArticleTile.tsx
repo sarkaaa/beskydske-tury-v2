@@ -75,7 +75,12 @@ export default async function ArticleTile({ article }: ArticleTileProps) {
           </p>
           <div className="mt-1 flex items-center gap-2 text-sm text-white/90 capitalize">
             {destinationType.map(({ type }: { type: "car" | "bus" | "train" }) => (
-              <RouteIcon key={type} type={type} className="h-4 w-4 shrink-0" />
+              <RouteIcon
+                key={type}
+                type={type}
+                className="h-4 w-4 shrink-0"
+                data-testid={`article-tile-transport-${type}`}
+              />
             ))}
           </div>
         </div>
