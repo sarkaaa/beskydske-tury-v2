@@ -62,7 +62,9 @@ export default async function ArticleTile({ article }: ArticleTileProps) {
             data-testid="article-tile-trail-type"
             aria-hidden
           />
-          <span>{trailType === "AB" ? "A → B" : "A → A"}</span>
+          <span data-testid={`trail-type-${trailType ?? "AA"}`}>
+            {trailType === "AB" ? "A → B" : "A → A"}
+          </span>
         </p>
         <div className="flex items-center justify-between">
           <p className="mt-1 flex items-center gap-2 text-sm text-white/90">
@@ -71,11 +73,16 @@ export default async function ArticleTile({ article }: ArticleTileProps) {
               data-testid="article-tile-trail-length"
               aria-hidden
             />
-            <span>{trailLengthKm} km</span>
+            <span data-testid={`trail-length`}>{trailLengthKm} km</span>
           </p>
           <div className="mt-1 flex items-center gap-2 text-sm text-white/90 capitalize">
             {destinationType.map(({ type }: { type: "car" | "bus" | "train" }) => (
-              <RouteIcon key={type} type={type} className="h-4 w-4 shrink-0" />
+              <RouteIcon
+                key={type}
+                type={type}
+                className="h-4 w-4 shrink-0"
+                data-testid={`article-tile-transport-${type}`}
+              />
             ))}
           </div>
         </div>

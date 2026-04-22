@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { filterTrails, openFiltering } from "../helpers/filtering";
 
 test.describe("Homepage", () => {
   test.beforeEach(async ({ page }) => {
@@ -56,6 +57,77 @@ test.describe("Trails", () => {
   test("Trasy page has title and heading", async ({ page }) => {
     await expect(page).toHaveTitle(/Trasy/);
     await expect(page.getByRole("heading", { name: "Trasy" })).toBeVisible();
+  });
+
+  test("trail should be filtered by transport type", async ({ page }) => {
+    await openFiltering(page);
+
+    await expect(page.getByTestId("btn-transport-car")).toBeVisible();
+    await expect(page.getByTestId("btn-transport-train")).toBeVisible();
+    await expect(page.getByTestId("btn-transport-bus")).toBeVisible();
+
+    await filterTrails(
+      page,
+      "car",
+      "btn-transport-car",
+      "btn-clear-transport",
+      "transport-icon-car",
+    );
+    await filterTrails(
+      page,
+      "bus",
+      "btn-transport-bus",
+      "btn-clear-transport",
+      "transport-icon-bus",
+    );
+    await filterTrails(
+      page,
+      "train",
+      "btn-transport-train",
+      "btn-clear-transport",
+      "transport-icon-train",
+    );
+  });
+
+  test("trail should be filtered by trail type", async ({ page }) => {
+    await openFiltering(page);
+
+    await expect(page.getByTestId("btn-trailType-AA")).toBeVisible();
+    await expect(page.getByTestId("btn-trailType-AB")).toBeVisible();
+
+    await filterTrails(
+      page,
+      "trailType=AA",
+      "btn-trailType-AA",
+      "btn-clear-trailType",
+      "trail-type-AA",
+    );
+    await filterTrails(
+      page,
+      "trailType=AB",
+      "btn-trailType-AB",
+      "btn-clear-trailType",
+      "trail-type-AB",
+    );
+  });
+
+  test("trail should be filtered by length", async ({ page }) => {
+    await openFiltering(page);
+
+    await expect(page.getByTestId("btn-length-10")).toBeVisible();
+    await expect(page.getByTestId("btn-length-15")).toBeVisible();
+    await expect(page.getByTestId("btn-length-15plus")).toBeVisible();
+
+    await filterTrails(page, "length=10", "btn-length-10", "btn-clear-length", "trail-length", 10);
+    await filterTrails(page, "length=15", "btn-length-15", "btn-clear-length", "trail-length", 15);
+    await filterTrails(
+      page,
+      "length=15plus",
+      "btn-length-15plus",
+      "btn-clear-length",
+      "trail-length",
+      15,
+    );
   });
 
   test("route cards link to detail pages", async ({ page }) => {
